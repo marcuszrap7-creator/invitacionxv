@@ -196,10 +196,11 @@
                     </select>
                 </div>
 
-                <div class="bg-white/50 p-6 rounded-xl border border-pink-100 shadow-inner">
-                    <textarea name="Mensaje" id="aiMessage" rows="3" placeholder="Tu mensaje aquí..." class="w-full px-4 py-3 text-sm bg-white/80 border border-gray-100 rounded-lg outline-none mb-4"></textarea>
-                    <button type="button" onclick="generateAiMessage()" id="btnGemini" class="btn-gemini w-full py-3 rounded-lg text-xs uppercase tracking-widest font-bold shadow-md text-white">✨ Inspirarme con IA</button>
-                    <p id="geminiStatus" class="text-[10px] text-gray-400 mt-2 text-center"></p>
+                <!-- Sección de Mensaje e IA ajustada para evitar marcos extraños -->
+                <div class="bg-white/50 p-6 rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+                    <textarea name="Mensaje" id="aiMessage" rows="3" placeholder="Tu mensaje aquí..." class="w-full px-4 py-3 text-sm bg-white/90 border border-gray-200 rounded-xl outline-none mb-4 focus:ring-1 focus:ring-pink-300 transition-all resize-none"></textarea>
+                    <button type="button" onclick="generateAiMessage()" id="btnGemini" class="btn-gemini w-full py-4 rounded-xl text-[10px] uppercase tracking-[0.2em] font-bold shadow-lg text-white active:scale-95 transition-transform">✨ Inspirarme con IA</button>
+                    <p id="geminiStatus" class="text-[10px] text-gray-400 mt-3 text-center italic"></p>
                 </div>
 
                 <button type="submit" class="btn-elegant px-16 py-5 uppercase tracking-[0.2em] text-xs font-bold w-full shadow-xl">Confirmar ahora</button>
@@ -230,9 +231,7 @@
     </footer>
 
     <script>
-        // --- CONFIGURACIÓN DE TU CLAVE ---
-        // ASEGÚRATE DE PONER TU CLAVE AQUÍ ABAJO
-        const apiKey = "AIzaSyANBIPjwom20fDUP17DBm4R2EbeFwsp3e4"; 
+        const apiKey = "AIzaSyDznMNZha9a5uAhpU4xudObPaJSeF8hIWY"; 
 
         async function callGemini(prompt) {
             let retries = 0;
@@ -252,7 +251,6 @@
                     
                     if (!response.ok) {
                         const errData = await response.json();
-                        console.error("Detalle del error:", errData);
                         throw new Error(errData.error?.message || 'Error en la respuesta');
                     }
                     
@@ -294,7 +292,6 @@
                     status.innerText = "✨ ¡Generado con éxito!";
                 }
             } catch (e) {
-                console.error(e);
                 status.innerText = "Fallo de conexión. Revisa si tu API Key es válida.";
             } finally {
                 btn.disabled = false;
