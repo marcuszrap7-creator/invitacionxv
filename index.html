@@ -36,7 +36,7 @@
             background-color: #1a1a1a;
         }
 
-        /* CAPA DE FONDO: Prioriza tu imagen local, pero usa una de internet como respaldo para la previsualización */
+        /* CAPA DE FONDO: Prioriza tu imagen local */
         .hero-bg {
             position: absolute;
             top: 0;
@@ -45,13 +45,12 @@
             height: 100%;
             background-image: 
                 linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('IMG-20260120-WA0003.jpg'), /* Tu foto local */
-                url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop'); /* Respaldo para ver el diseño ahora */
+                url('IMG-20260120-WA0003.jpg'), /* Asegúrate que el archivo se llame así exactamente */
+                url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop');
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
             z-index: 1;
-            transition: opacity 0.5s ease;
         }
 
         .hero-content {
@@ -89,11 +88,6 @@
             transition: all 0.3s ease;
         }
 
-        .btn-gemini:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
         .countdown-item {
             min-width: 90px;
             border-right: 1px solid #fce7f3;
@@ -120,26 +114,12 @@
             opacity: 1;
             margin-top: 2rem;
         }
-
-        .loading-dots:after {
-            content: '.';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- PORTADA PRINCIPAL -->
     <header class="hero-section">
         <div class="hero-bg"></div>
-        
         <div class="hero-content px-4 animate-fade-in">
             <h2 class="text-2xl md:text-3xl font-elegant tracking-[0.5em] mb-4 uppercase opacity-90">Mis Quince Años</h2>
             <h1 class="text-7xl md:text-9xl font-cursive text-white mb-6 drop-shadow-2xl">Yuliana</h1>
@@ -148,7 +128,6 @@
         </div>
     </header>
 
-    <!-- CUENTA REGRESIVA -->
     <section class="py-20 px-4 text-center relative">
         <div class="max-w-4xl mx-auto glass-card p-10 md:p-16 border-double border-4 border-pink-100">
             <h3 class="text-3xl font-elegant text-gray-800 mb-10 tracking-widest uppercase">Faltan solo...</h3>
@@ -173,13 +152,12 @@
         </div>
     </section>
 
-    <!-- UBICACIÓN Y FECHA -->
     <section class="py-20 bg-white text-center">
         <div class="max-w-3xl mx-auto px-4">
             <div class="mb-20">
                 <h4 class="text-4xl font-elegant mb-6 tracking-widest uppercase">¿Cuándo y Dónde?</h4>
                 <div class="space-y-2">
-                    <p class="text-3xl italic">Sábado, 24 de Abril</p>
+                    <p class="text-3xl italic">Viernes, 24 de Abril</p>
                     <p class="text-xl uppercase tracking-[0.4em] font-elegant text-pink-600">21:30 Horas</p>
                 </div>
             </div>
@@ -187,10 +165,7 @@
             <div class="mb-16">
                 <p class="text-3xl mb-2 font-elegant uppercase tracking-wider">Salón Cirse</p>
                 <p class="text-xl text-gray-600 mb-8 italic">Delegación Paraná<br>Andrés Pasos 405, Paraná, Entre Ríos</p>
-                
-                <a href="https://www.google.com/maps/search/?api=1&query=Andres+Pasos+405+Parana+Entre+Rios+Salon+Cirse" target="_blank" class="btn-elegant inline-block px-12 py-5 text-sm uppercase tracking-widest">
-                    Abrir Mapa
-                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Andres+Pasos+405+Parana+Entre+Rios+Salon+Cirse" target="_blank" class="btn-elegant inline-block px-12 py-5 text-sm uppercase tracking-widest">Abrir Mapa</a>
             </div>
 
             <div class="max-w-xs mx-auto border-t border-b border-pink-100 py-8">
@@ -200,7 +175,6 @@
         </div>
     </section>
 
-    <!-- CONFIRMACIÓN -->
     <section class="py-24 px-4 bg-pink-50/30">
         <div class="max-w-2xl mx-auto glass-card p-10 md:p-16">
             <h3 class="text-6xl font-cursive text-center text-pink-700 mb-4">Confirma tu asistencia</h3>
@@ -224,35 +198,19 @@
                 </div>
 
                 <div class="bg-white/50 p-6 rounded-xl border border-pink-100 shadow-inner">
-                    <p class="text-xs uppercase tracking-widest font-elegant mb-4 text-center text-gray-400">Mensaje para la quinceañera</p>
                     <textarea name="Mensaje" id="aiMessage" rows="3" placeholder="Tu mensaje aquí..." class="w-full px-4 py-3 text-sm bg-white/80 border border-gray-100 rounded-lg outline-none mb-4"></textarea>
-                    
-                    <button type="button" onclick="generateAiMessage()" id="btnGemini" class="btn-gemini w-full py-3 rounded-lg text-xs uppercase tracking-widest font-bold shadow-md">
-                        ✨ Inspirarme con IA
-                    </button>
+                    <button type="button" onclick="generateAiMessage()" id="btnGemini" class="btn-gemini w-full py-3 rounded-lg text-xs uppercase tracking-widest font-bold shadow-md text-white">✨ Inspirarme con IA</button>
                     <p id="geminiStatus" class="text-[10px] text-gray-400 mt-2 text-center"></p>
                 </div>
 
-                <button type="submit" class="btn-elegant px-16 py-5 uppercase tracking-[0.2em] text-xs font-bold w-full shadow-xl">
-                    Confirmar ahora
-                </button>
+                <button type="submit" class="btn-elegant px-16 py-5 uppercase tracking-[0.2em] text-xs font-bold w-full shadow-xl">Confirmar ahora</button>
             </form>
 
-            <!-- SECCIÓN DE PRECIOS -->
             <div class="mt-16 pt-8 border-t border-gray-100 text-center">
-                <button onclick="togglePrices()" class="text-pink-600 font-elegant text-xs tracking-widest uppercase hover:underline">
-                    Ver valores de la tarjeta
-                </button>
-                
+                <button onclick="togglePrices()" class="text-pink-600 font-elegant text-xs tracking-widest uppercase hover:underline">Ver valores de la tarjeta</button>
                 <div id="priceDetails" class="bg-white p-6 mt-4 rounded-lg shadow-sm border border-pink-50">
-                    <div class="flex justify-between py-2 border-b border-gray-50">
-                        <span class="italic text-gray-600">Menores</span>
-                        <span class="font-bold text-pink-700">$20.000</span>
-                    </div>
-                    <div class="flex justify-between py-2 mb-6">
-                        <span class="italic text-gray-600">Mayores</span>
-                        <span class="font-bold text-pink-700">$30.000</span>
-                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-50"><span class="italic text-gray-600">Menores</span><span class="font-bold text-pink-700">$20.000</span></div>
+                    <div class="flex justify-between py-2 mb-6"><span class="italic text-gray-600">Mayores</span><span class="font-bold text-pink-700">$30.000</span></div>
                     <p class="text-xs text-gray-400 mb-2 uppercase tracking-tighter">Transferencia Alias</p>
                     <p class="text-lg font-bold select-all bg-gray-50 p-2 inline-block">yulianamoyano20</p>
                 </div>
@@ -266,12 +224,10 @@
 
     <script>
         const apiKey = ""; 
-        
         async function callGemini(prompt) {
             let retries = 0;
             const maxRetries = 5;
             const delays = [1000, 2000, 4000, 8000, 16000];
-
             while (retries < maxRetries) {
                 try {
                     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
@@ -297,18 +253,15 @@
             const btn = document.getElementById('btnGemini');
             const status = document.getElementById('geminiStatus');
             const textarea = document.getElementById('aiMessage');
-
-            if (!name) { status.innerText = "Por favor, escribe tu nombre primero."; return; }
-
+            if (!name) { status.innerText = "Escribe tu nombre primero."; return; }
             btn.disabled = true;
-            status.innerHTML = '<span class="loading-dots">Creando algo especial</span>';
-            
+            status.innerText = "Inspirándome...";
             try {
                 const message = await callGemini(`Escribe una felicitación para Yuliana por sus 15 años de parte de ${name}. Máximo 20 palabras.`);
                 textarea.value = message.trim().replace(/"/g, '');
                 status.innerText = "✨ ¡Listo!";
             } catch (e) {
-                status.innerText = "Inténtalo de nuevo.";
+                status.innerText = "Error, intenta de nuevo.";
             } finally {
                 btn.disabled = false;
             }
@@ -326,11 +279,7 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
-
-        function togglePrices() {
-            document.getElementById('priceDetails').classList.toggle('show');
-        }
+        function togglePrices() { document.getElementById('priceDetails').classList.toggle('show'); }
     </script>
 </body>
-
 </html>
