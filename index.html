@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+YPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +36,6 @@
             background-color: #1a1a1a;
         }
 
-        /* CAPA DE FONDO: Prioriza tu imagen local */
         .hero-bg {
             position: absolute;
             top: 0;
@@ -45,7 +44,7 @@
             height: 100%;
             background-image: 
                 linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('IMG-20260120-WA0003.jpg'), /* Asegúrate que el archivo se llame así exactamente */
+                url('IMG-20260120-WA0003.jpg'), 
                 url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop');
             background-position: center;
             background-size: cover;
@@ -106,11 +105,11 @@
         #priceDetails {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+            transition: max-height 0.6s ease-in-out, opacity 0.4s ease;
             opacity: 0;
         }
         #priceDetails.show {
-            max-height: 800px;
+            max-height: 1000px; /* Aumentado para asegurar que todo el contenido sea visible */
             opacity: 1;
             margin-top: 2rem;
         }
@@ -209,10 +208,18 @@
             <div class="mt-16 pt-8 border-t border-gray-100 text-center">
                 <button onclick="togglePrices()" class="text-pink-600 font-elegant text-xs tracking-widest uppercase hover:underline">Ver valores de la tarjeta</button>
                 <div id="priceDetails" class="bg-white p-6 mt-4 rounded-lg shadow-sm border border-pink-50">
-                    <div class="flex justify-between py-2 border-b border-gray-50"><span class="italic text-gray-600">Menores</span><span class="font-bold text-pink-700">$20.000</span></div>
-                    <div class="flex justify-between py-2 mb-6"><span class="italic text-gray-600">Mayores</span><span class="font-bold text-pink-700">$30.000</span></div>
-                    <p class="text-xs text-gray-400 mb-2 uppercase tracking-tighter">Transferencia Alias</p>
-                    <p class="text-lg font-bold select-all bg-gray-50 p-2 inline-block">yulianamoyano20</p>
+                    <div class="flex justify-between py-2 border-b border-gray-100">
+                        <span class="italic text-gray-600">Menores</span>
+                        <span class="font-bold text-pink-700">$20.000</span>
+                    </div>
+                    <div class="flex justify-between py-2 mb-6 border-b border-gray-100">
+                        <span class="italic text-gray-600">Mayores</span>
+                        <span class="font-bold text-pink-700">$30.000</span>
+                    </div>
+                    <div class="pt-2">
+                        <p class="text-xs text-gray-400 mb-2 uppercase tracking-tighter">Transferencia Alias</p>
+                        <p class="text-lg font-bold select-all bg-gray-50 p-2 inline-block rounded">yulianamoyano20</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -223,21 +230,27 @@
     </footer>
 
     <script>
-        const apiKey = ""; 
+        // --- CONFIGURACIÓN DE TU CLAVE ---
+        const apiKey = "AIzaSyANBIPjwom20fDUP17DBm4R2EbeFwsp3e4"; 
+
         async function callGemini(prompt) {
             let retries = 0;
             const maxRetries = 5;
             const delays = [1000, 2000, 4000, 8000, 16000];
+            
             while (retries < maxRetries) {
                 try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             contents: [{ parts: [{ text: prompt }] }],
-                            systemInstruction: { parts: [{ text: "Eres un asistente poético. Escribe un mensaje corto y emotivo para una quinceañera llamada Yuliana." }] }
+                            systemInstruction: { parts: [{ text: "Eres un asistente poético para eventos sociales. Escribe un mensaje corto, dulce y emotivo para una quinceañera llamada Yuliana de parte de un invitado. Máximo 20 palabras." }] }
                         })
                     });
+                    
+                    if (!response.ok) throw new Error('Error en API');
+                    
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text;
                 } catch (error) {
@@ -249,19 +262,36 @@
         }
 
         async function generateAiMessage() {
-            const name = document.getElementById('firstName').value;
+            const nameField = document.getElementById('firstName');
+            const name = nameField.value.trim();
             const btn = document.getElementById('btnGemini');
             const status = document.getElementById('geminiStatus');
             const textarea = document.getElementById('aiMessage');
-            if (!name) { status.innerText = "Escribe tu nombre primero."; return; }
+            
+            if (!apiKey || apiKey === "") {
+                status.innerText = "Error: Falta la API Key.";
+                return;
+            }
+
+            if (!name) { 
+                status.innerText = "Escribe tu nombre primero."; 
+                nameField.focus();
+                return; 
+            }
+            
             btn.disabled = true;
-            status.innerText = "Inspirándome...";
+            status.innerText = "✨ Creando un mensaje especial...";
+            
             try {
-                const message = await callGemini(`Escribe una felicitación para Yuliana por sus 15 años de parte de ${name}. Máximo 20 palabras.`);
-                textarea.value = message.trim().replace(/"/g, '');
-                status.innerText = "✨ ¡Listo!";
+                const message = await callGemini(`Escribe una felicitación corta y emotiva para Yuliana por sus 15 años de parte de ${name}. Sé muy tierno/a.`);
+                if (message) {
+                    textarea.value = message.trim().replace(/^"|"$/g, '');
+                    status.innerText = "✨ ¡Mensaje generado!";
+                } else {
+                    throw new Error();
+                }
             } catch (e) {
-                status.innerText = "Error, intenta de nuevo.";
+                status.innerText = "Error de conexión. Inténtalo de nuevo.";
             } finally {
                 btn.disabled = false;
             }
@@ -279,7 +309,10 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
-        function togglePrices() { document.getElementById('priceDetails').classList.toggle('show'); }
+
+        function togglePrices() { 
+            document.getElementById('priceDetails').classList.toggle('show'); 
+        }
     </script>
 </body>
 </html>
