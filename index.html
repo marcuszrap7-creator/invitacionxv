@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -108,7 +109,7 @@
             opacity: 0;
         }
         #priceDetails.show {
-            max-height: 1000px; /* Aumentado para asegurar que todo el contenido sea visible */
+            max-height: 1000px;
             opacity: 1;
             margin-top: 2rem;
         }
@@ -230,12 +231,13 @@
 
     <script>
         // --- CONFIGURACIÓN DE TU CLAVE ---
+        // ASEGÚRATE DE PONER TU CLAVE AQUÍ ABAJO
         const apiKey = "AIzaSyANBIPjwom20fDUP17DBm4R2EbeFwsp3e4"; 
 
         async function callGemini(prompt) {
             let retries = 0;
-            const maxRetries = 5;
-            const delays = [1000, 2000, 4000, 8000, 16000];
+            const maxRetries = 3;
+            const delays = [1000, 2000, 4000];
             
             while (retries < maxRetries) {
                 try {
@@ -244,11 +246,15 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             contents: [{ parts: [{ text: prompt }] }],
-                            systemInstruction: { parts: [{ text: "Eres un asistente poético para eventos sociales. Escribe un mensaje corto, dulce y emotivo para una quinceañera llamada Yuliana de parte de un invitado. Máximo 20 palabras." }] }
+                            systemInstruction: { parts: [{ text: "Eres un asistente poético. Escribe un mensaje de 15 palabras para Yuliana por sus 15 años de parte de un invitado." }] }
                         })
                     });
                     
-                    if (!response.ok) throw new Error('Error en API');
+                    if (!response.ok) {
+                        const errData = await response.json();
+                        console.error("Detalle del error:", errData);
+                        throw new Error(errData.error?.message || 'Error en la respuesta');
+                    }
                     
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -267,8 +273,8 @@
             const status = document.getElementById('geminiStatus');
             const textarea = document.getElementById('aiMessage');
             
-            if (!apiKey || apiKey === "") {
-                status.innerText = "Error: Falta la API Key.";
+            if (!apiKey || apiKey === "TU_CLAVE_AQUI") {
+                status.innerText = "Error: Debes poner tu API Key en el código.";
                 return;
             }
 
@@ -279,18 +285,17 @@
             }
             
             btn.disabled = true;
-            status.innerText = "✨ Creando un mensaje especial...";
+            status.innerText = "✨ Conectando con la IA...";
             
             try {
-                const message = await callGemini(`Escribe una felicitación corta y emotiva para Yuliana por sus 15 años de parte de ${name}. Sé muy tierno/a.`);
+                const message = await callGemini(`Felicita a Yuliana de parte de ${name}. Mensaje corto y tierno.`);
                 if (message) {
                     textarea.value = message.trim().replace(/^"|"$/g, '');
-                    status.innerText = "✨ ¡Mensaje generado!";
-                } else {
-                    throw new Error();
+                    status.innerText = "✨ ¡Generado con éxito!";
                 }
             } catch (e) {
-                status.innerText = "Error de conexión. Inténtalo de nuevo.";
+                console.error(e);
+                status.innerText = "Fallo de conexión. Revisa si tu API Key es válida.";
             } finally {
                 btn.disabled = false;
             }
@@ -315,4 +320,3 @@
     </script>
 </body>
 </html>
-
